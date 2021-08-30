@@ -1,5 +1,6 @@
 const {v4} = require('uuid')
 const ApiError = require('../error/apiError')
+const getTime = require("../library/library");
 
 let tasksArr = [
     {
@@ -71,7 +72,31 @@ class TaskController {
 
     getAll(req, res) {
 
-        res.json(tasksArr)
+        const {filterType, sortDirection} = req.query
+
+        let filterTasks
+
+        switch (filterType.toUpperCase()){
+            case "DONE":
+                filterTasks = tasksArr.filter(task => task.done)
+                break
+
+            case "UNDONE":
+                filterTasks = tasksArr.filter(task => !task.done)
+                break
+
+            default:
+                filterTasks = tasksArr
+                break
+        }
+
+
+        const filterAndSortTasks = filterTasks.sort((a, b) => {
+            const res = getTime(a.createdAt) - getTime(b.createdAt)
+            return sortDirection.toUpperCase() === 'ASC' ? res : -res
+        })
+
+        res.json(filterAndSortTasks)
 
     }
 
@@ -130,6 +155,9 @@ class TaskController {
 
         res.json(tasksArr.find(task => task.uuid === id))
     }
+
+
+
 
 
 }

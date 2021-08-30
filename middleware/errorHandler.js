@@ -5,7 +5,5 @@ module.exports = (error, req, res, next) => {
         return res.status(error.status).json({message: error.message})
     }
 
-    console.log('fesfwefewf')
-
     return res.status(404).json({message: 'Непредвиденная ощибка'})
 }
