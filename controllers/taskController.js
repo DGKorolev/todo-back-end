@@ -2,14 +2,18 @@ const {v4} = require('uuid')
 const ApiError = require('../error/apiError')
 const getTime = require("../library/library");
 const fs = require("fs");
+const Task = require('../model/Task')
 
 
 class TaskController {
 
     getAll(req, res) {
 
+        const tasks = Task.getTasks()
 
-        const tasks = JSON.parse(fs.readFileSync("./data.txt", 'utf8'))
+        for (let item of tasks){
+            console.log(item)
+        }
 
         const {filterType = '', sortDirection = ''} = req.query
 
@@ -30,10 +34,14 @@ class TaskController {
         }
 
 
+
         const filterAndSortTasks = filterTasks.sort((a, b) => {
             const res = getTime(a.createdAt) - getTime(b.createdAt)
             return sortDirection.toUpperCase() === 'ASC' ? res : -res
         })
+
+
+
 
         res.json(filterAndSortTasks)
 
@@ -53,16 +61,16 @@ class TaskController {
             updatedAt: new Date().toISOString()
         }
 
-        const tasks = JSON.parse(fs.readFileSync("./data.txt", 'utf8'))
+        const tasks = Task.getTasks()
         tasks.push(newTask)
-        fs.writeFileSync('./data.txt', JSON.stringify(tasks), 'utf8')
+        Task.saveTasks(tasks)
 
         res.json(newTask)
     }
 
     delete(req, res, next) {
 
-        let tasks = JSON.parse(fs.readFileSync("./data.txt", 'utf8'))
+        let tasks = Task.getTasks()
 
         const {id} = req.params
 
@@ -70,19 +78,18 @@ class TaskController {
 
         tasks = tasks.filter(task => task.uuid !== id)
 
-        fs.writeFileSync('./data.txt', JSON.stringify(tasks), 'utf8')
+        Task.saveTasks(tasks)
 
         res.status(204).json()
     }
 
     edit(req, res, next) {
 
-        let tasks = JSON.parse(fs.readFileSync("./data.txt", 'utf8'))
-
-        console.log(tasks)
+        let tasks = Task.getTasks()
 
         const {id} = req.params
         if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
+
 
         const editData = {}
         if (req.body.hasOwnProperty('name')) {
@@ -97,16 +104,17 @@ class TaskController {
 
         }
 
+
         tasks = tasks.map(task => {
-                console.log(task.uuid !== id)
                 if (task.uuid !== id) return task
                 return {...task, ...editData}
             }
         )
 
-        fs.writeFileSync('./data.txt', JSON.stringify(tasks), 'utf8')
 
-        res.json(tasksArr.find(task => task.uuid === id))
+        Task.saveTasks(tasks)
+
+        res.json(tasks.find(task => task.uuid === id))
     }
 
 
