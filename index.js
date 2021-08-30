@@ -6,9 +6,10 @@ const app = express()
 
 app.use(express.json())
 
-
 app.get('/', taskController.getAll)
 app.post('/', taskController.create)
+app.delete('/:id', taskController.delete)
+app.patch('/:id', taskController.edit)
 
 
 app.listen(3000, () => {

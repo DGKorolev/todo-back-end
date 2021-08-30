@@ -1,6 +1,6 @@
 const {v4} = require('uuid')
 
-const tasks = [
+let tasksArr = [
     {
         "uuid": "53a0796b-1217-4381-b35b-5538ed73bfff",
         "name": "create new browser",
@@ -68,13 +68,13 @@ const tasks = [
 
 class TaskController {
 
-    getAll(req, res){
+    getAll(req, res) {
 
-        res.json(tasks)
+        res.json(tasksArr)
 
     }
 
-    create(req, res){
+    create(req, res) {
 
         const {name, done} = req.body
 
@@ -86,9 +86,39 @@ class TaskController {
             updatedAt: new Date().toISOString()
         }
 
-        tasks.push(newTask)
+        tasksArr.push(newTask)
 
         res.json(newTask)
+    }
+
+    delete(req, res) {
+        const {id} = req.params
+
+        tasksArr = tasksArr.filter(task => task.uuid !== id)
+
+        res.status(200).json({
+            tasksArr
+        })
+    }
+
+    edit(req, res) {
+
+        const {id} = req.params
+
+        const {name, done} = req.body
+
+        const editData = {}
+        if (name) editData.name = name
+        if (done) editData.done = done
+
+        tasksArr = tasksArr.map(task => {
+
+                if (task.uuid !== id) return task
+                return {...task, ...editData}
+            }
+        )
+
+        res.json(tasksArr.find(task => task.uuid === id))
     }
 
 
