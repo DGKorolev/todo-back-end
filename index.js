@@ -1,17 +1,17 @@
 const express = require('express')
-const taskController = require('./controllers/taskController')
+const taskRouter = require('./routes/taskRouter')
+const errorHandler = require('./middleware/errorHandler')
+require('dotenv').config()
 
 
 const app = express()
 
 app.use(express.json())
 
-app.get('/', taskController.getAll)
-app.post('/', taskController.create)
-app.delete('/:id', taskController.delete)
-app.patch('/:id', taskController.edit)
+app.use('/task', taskRouter)
 
+app.use(errorHandler)
 
-app.listen(3000, () => {
-    console.log(`Server has been started at http://localhost:3000`)
+app.listen(process.env.PORT, process.env.HOST, () => {
+    console.log(`Server has been started at ${process.env.HOST}:${process.env.PORT}`)
 })
