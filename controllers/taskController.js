@@ -1,4 +1,5 @@
 const {v4} = require('uuid')
+const ApiError = require('../error/apiError')
 
 let tasksArr = [
     {
@@ -74,14 +75,16 @@ class TaskController {
 
     }
 
-    create(req, res) {
+    create(req, res, next) {
 
-        const {name, done} = req.body
+        const {name} = req.body
+
+        if (!name.trim()) return next(ApiError.unprocessableEntity('Task name not defined'))
 
         const newTask = {
             uuid: v4(),
             name,
-            done,
+            done: false,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         }
@@ -91,14 +94,14 @@ class TaskController {
         res.json(newTask)
     }
 
-    delete(req, res) {
+    delete(req, res, next) {
         const {id} = req.params
+
+        if (!tasksArr.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
 
         tasksArr = tasksArr.filter(task => task.uuid !== id)
 
-        res.status(200).json({
-            tasksArr
-        })
+        res.status(204).json()
     }
 
     edit(req, res) {

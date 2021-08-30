@@ -7,8 +7,10 @@ class ApiError extends Error{
         this.message = message
     }
 
-    static unprocessableEntity(){
-        return new ApiError(422, '')
+    static unprocessableEntity(message){
+        return new ApiError(422, message)
     }
 
 }
+
+module.exports = ApiError
