@@ -2,6 +2,30 @@ const getTime = require("../../library/library");
 const Task = require("../../model/Task")
 
 
+function sortAndFilterTasks(tasks, filterType, sortDirection){
+
+    let filterTasks
+
+    switch (filterType.toUpperCase()) {
+        case "DONE":
+            filterTasks = tasks.filter(task => task.done)
+            break
+
+        case "UNDONE":
+            filterTasks = tasks.filter(task => !task.done)
+            break
+
+        default:
+            filterTasks = tasks
+            break
+    }
+
+    return  filterTasks.sort((a, b) => {
+        const res = getTime(a.createdAt) - getTime(b.createdAt)
+        return sortDirection.toUpperCase() === 'ASC' ? res : -res
+    })
+
+}
 
 module.exports = (req, res) => {
 
@@ -12,31 +36,5 @@ module.exports = (req, res) => {
     const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
 
     res.json(sortedAndFilteredTasks)
-
-
-    function sortAndFilterTasks(tasks, filterType, sortDirection){
-
-        let filterTasks
-
-        switch (filterType.toUpperCase()) {
-            case "DONE":
-                filterTasks = tasks.filter(task => task.done)
-                break
-
-            case "UNDONE":
-                filterTasks = tasks.filter(task => !task.done)
-                break
-
-            default:
-                filterTasks = tasks
-                break
-        }
-
-        return  filterTasks.sort((a, b) => {
-            const res = getTime(a.createdAt) - getTime(b.createdAt)
-            return sortDirection.toUpperCase() === 'ASC' ? res : -res
-        })
-
-    }
 
 }
