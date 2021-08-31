@@ -15,14 +15,21 @@ function taskEdit(req, res, next) {
 
 
     const editData = {}
+
     if (req.body.hasOwnProperty('name')) {
+
         const name = req.body.name.trim()
-        if (name) editData.name = name
-        else return next(ApiError.unprocessableEntity('Task name not defined'))
+
+        if (!name) return next(ApiError.unprocessableEntity('Task name not defined'))
+
+        editData.name = name
+
     }
 
     if (req.body.hasOwnProperty('done')) {
+
         const done = req.body.done
+
         editData.done = Boolean(done)
 
     }
