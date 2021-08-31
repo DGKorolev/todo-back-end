@@ -1,6 +1,22 @@
+const express = require('express')
+const router = express()
 const getTime = require("../../library/library");
 const Task = require("../../model/Task")
 
+
+module.exports = router.get('/tasks', getAll)
+
+function getAll(req, res){
+
+    const tasks = Task.getTasks()
+
+    const {filterType = '', sortDirection = ''} = req.query
+
+    const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+
+    res.json(sortedAndFilteredTasks)
+
+}
 
 function sortAndFilterTasks(tasks, filterType, sortDirection){
 
@@ -27,14 +43,4 @@ function sortAndFilterTasks(tasks, filterType, sortDirection){
 
 }
 
-module.exports = (req, res) => {
 
-    const tasks = Task.getTasks()
-
-    const {filterType = '', sortDirection = ''} = req.query
-
-    const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
-
-    res.json(sortedAndFilteredTasks)
-
-}

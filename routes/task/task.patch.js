@@ -1,7 +1,12 @@
+const express = require('express')
+const router = express()
 const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
 
-module.exports = (req, res, next) => {
+
+module.exports = router.patch('/task/:id', taskEdit)
+
+function taskEdit(req, res, next) {
 
     let tasks = Task.getTasks()
 

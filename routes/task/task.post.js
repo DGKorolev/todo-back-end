@@ -1,8 +1,12 @@
+const express = require('express')
+const router = express()
 const ApiError = require("../../error/apiError");
 const {v4} = require("uuid");
 const Task = require("../../model/Task")
 
-module.exports = (req, res, next) => {
+module.exports = router.post('/task', taskCreate)
+
+function taskCreate(req, res, next) {
 
     const {name} = req.body
 

@@ -1,8 +1,12 @@
+const express = require('express')
+const router = express()
 const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
 
 
-module.exports = (req, res, next) => {
+module.exports = router.delete('/task/:id', taskDelete)
+
+function taskDelete(req, res, next) {
 
     let tasks = Task.getTasks()
 
