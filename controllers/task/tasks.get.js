@@ -5,9 +5,15 @@ module.exports = (req, res) => {
 
     const tasks = Task.getTasks()
 
-    tasks.sort((a, b) => getTime(a.date) - getTime(a.date))
-
     const {filterType = '', sortDirection = ''} = req.query
+
+    const sortAndFilterTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+
+    res.json(sortAndFilterTasks)
+
+}
+
+const sortAndFilterTasks = (tasks, filterType, sortDirection) => {
 
     let filterTasks
 
@@ -25,11 +31,9 @@ module.exports = (req, res) => {
             break
     }
 
-    const filterAndSortTasks = filterTasks.sort((a, b) => {
+    return  filterTasks.sort((a, b) => {
         const res = getTime(a.createdAt) - getTime(b.createdAt)
         return sortDirection.toUpperCase() === 'ASC' ? res : -res
     })
-
-    res.json(filterAndSortTasks)
 
 }
