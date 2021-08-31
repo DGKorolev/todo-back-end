@@ -6,9 +6,9 @@ const taskDelete = require("../controllers/task/task.delete")
 const taskEdit = require("../controllers/task/task.patch")
 
 
-router.get('/', taskGetAll)
-router.post('/', taskCreate)
-router.delete('/:id', taskDelete)
-router.patch('/:id', taskEdit)
+router.get('/tasks', taskGetAll)
+router.post('/task', taskCreate)
+router.delete('/task/:id', taskDelete)
+router.patch('/task/:id', taskEdit)
 
 module.exports = router

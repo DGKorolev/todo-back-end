@@ -10,8 +10,7 @@ const app = express()
 
 app.use(express.json())
 
-
-app.use('/task', taskRouter)
+app.use(taskRouter)
 
 app.use(errorHandler)
 
