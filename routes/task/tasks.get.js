@@ -4,21 +4,25 @@ const getTime = require("../../library/library");
 const Task = require("../../model/Task")
 
 
-module.exports = router.get('/tasks', getAll)
+module.exports = router.get(
+    '/tasks',
 
-async function getAll(req, res){
+    async (req, res) => {
 
-    const tasks = await Task.getTasks()
+        const tasks = await Task.getTasks()
 
-    const {filterType = '', sortDirection = ''} = req.query
+        const {filterType = '', sortDirection = ''} = req.query
 
-    const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+        const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
 
-    res.json(sortedAndFilteredTasks)
+        res.json(sortedAndFilteredTasks)
 
-}
+    }
+)
 
-function sortAndFilterTasks(tasks, filterType, sortDirection){
+
+
+function sortAndFilterTasks(tasks, filterType, sortDirection) {
 
     let filterTasks
 
@@ -36,7 +40,7 @@ function sortAndFilterTasks(tasks, filterType, sortDirection){
             break
     }
 
-    return  filterTasks.sort((a, b) => {
+    return filterTasks.sort((a, b) => {
         const res = getTime(a.createdAt) - getTime(b.createdAt)
         return sortDirection.toUpperCase() === 'ASC' ? res : -res
     })

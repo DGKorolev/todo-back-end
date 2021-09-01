@@ -4,20 +4,22 @@ const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
 
 
-module.exports = router.delete('/task/:id', taskDelete)
+module.exports = router.delete(
+    '/task/:id',
 
-async function taskDelete(req, res, next) {
+    async (req, res, next) => {
 
-    let tasks = await Task.getTasks()
+        let tasks = await Task.getTasks()
 
-    const {id} = req.params
+        const {id} = req.params
 
-    if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
+        if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
 
-    tasks = tasks.filter(task => task.uuid !== id)
+        tasks = tasks.filter(task => task.uuid !== id)
 
-    Task.saveTasks(tasks)
+        await Task.saveTasks(tasks)
 
-    res.status(204).json()
+        res.status(204).json()
 
-}
+    }
+)
