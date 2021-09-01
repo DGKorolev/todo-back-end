@@ -3,14 +3,22 @@ const router = express()
 const ApiError = require("../../error/apiError");
 const {v4} = require("uuid");
 const Task = require("../../model/Task")
+const { body, validationResult } = require('express-validator');
 
-module.exports = router.post('/task', taskCreate)
+module.exports = router.post(
+    '/task',
+    body('name').isString().bail().trim().notEmpty(),
+    taskCreate
+)
 
 async function taskCreate(req, res, next) {
 
-    const {name} = req.body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        next(ApiError.validationError())
+    }
 
-    if (!name.trim()) return next(ApiError.unprocessableEntity('Task name not defined'))
+    const {name} = req.body
 
     const newTask = {
         uuid: v4(),
