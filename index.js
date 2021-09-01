@@ -1,7 +1,12 @@
 const express = require('express')
 const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware')
 const recursive = require('recursive-readdir-sync');
+const fs = require('fs')
 
+fs.access('date.txt', (error) => {
+        if (error) fs.writeFileSync('data.txt', '')
+    }
+)
 
 const app = express()
 
