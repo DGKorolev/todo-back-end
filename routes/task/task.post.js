@@ -15,7 +15,7 @@ async function taskCreate(req, res, next) {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        next(ApiError.validationError())
+        next(ApiError.unprocessableEntity('Validation error'))
     }
 
     const {name} = req.body

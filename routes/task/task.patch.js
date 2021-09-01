@@ -15,7 +15,7 @@ async function taskEdit(req, res, next) {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return next(ApiError.unprocessableEntity('dfsfsd'))
+        return next(ApiError.unprocessableEntity('Validation error'))
     }
 
     let tasks = await Task.getTasks()
