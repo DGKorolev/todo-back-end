@@ -11,6 +11,10 @@ class ApiError extends Error{
         return new ApiError(422, message)
     }
 
+    static badRequest(message = 'Bad request'){
+        return new ApiError(400, message)
+    }
+
 }
 
 module.exports = ApiError

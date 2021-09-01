@@ -2,21 +2,18 @@ const express = require('express')
 const router = express()
 const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
-const {body, validationResult} = require('express-validator');
-
+const {body} = require('express-validator');
+const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 
 module.exports = router.patch(
     '/task/:id',
     body("name").optional().isString().trim().notEmpty(),
     body('done').optional().toBoolean(),
-    taskEdit)
+    checkValidateErrorMiddleware,
+    taskEdit
+)
 
 async function taskEdit(req, res, next) {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(ApiError.unprocessableEntity('Validation error'))
-    }
 
     let tasks = await Task.getTasks()
 
@@ -39,5 +36,4 @@ async function taskEdit(req, res, next) {
     Task.saveTasks(tasks)
 
     res.json(tasks.find(task => task.uuid === id))
-
 }

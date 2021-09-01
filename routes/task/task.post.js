@@ -1,22 +1,18 @@
 const express = require('express')
 const router = express()
-const ApiError = require("../../error/apiError");
 const {v4} = require("uuid");
 const Task = require("../../model/Task")
-const { body, validationResult } = require('express-validator');
+const {body} = require('express-validator');
+const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 
 module.exports = router.post(
     '/task',
     body('name').isString().bail().trim().notEmpty(),
+    checkValidateErrorMiddleware,
     taskCreate
 )
 
 async function taskCreate(req, res, next) {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        next(ApiError.unprocessableEntity('Validation error'))
-    }
 
     const {name} = req.body
 
@@ -30,6 +26,7 @@ async function taskCreate(req, res, next) {
 
     const tasks = await Task.getTasks()
     tasks.push(newTask)
+
     Task.saveTasks(tasks)
 
     res.json(newTask)
