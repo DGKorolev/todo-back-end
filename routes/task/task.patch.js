@@ -23,17 +23,13 @@ module.exports = router.patch(
         ['name', 'done']
             .forEach(propertyName => {
                 if (req.body.hasOwnProperty(propertyName)) editData[propertyName] = req.body[propertyName]
-            })
+            });
 
-        tasks = tasks.map(task => {
-                if (task.uuid !== id) return task
-                return {...task, ...editData}
-            }
-        )
-
+        const editTaskIndex = tasks.findIndex(task => task.uuid === id)
+        tasks[editTaskIndex] = {...tasks[editTaskIndex], ...editData}
         await Task.saveTasks(tasks)
 
-        res.json(tasks.find(task => task.uuid === id))
+        res.json(tasks[editTaskIndex])
     }
 )
 
