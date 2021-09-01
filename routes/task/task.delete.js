@@ -6,9 +6,9 @@ const ApiError = require("../../error/apiError");
 
 module.exports = router.delete('/task/:id', taskDelete)
 
-function taskDelete(req, res, next) {
+async function taskDelete(req, res, next) {
 
-    let tasks = Task.getTasks()
+    let tasks = await Task.getTasks()
 
     const {id} = req.params
 

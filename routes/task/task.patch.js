@@ -6,9 +6,9 @@ const ApiError = require("../../error/apiError");
 
 module.exports = router.patch('/task/:id', taskEdit)
 
-function taskEdit(req, res, next) {
+async function taskEdit(req, res, next) {
 
-    let tasks = Task.getTasks()
+    let tasks = await Task.getTasks()
 
     const {id} = req.params
     if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))

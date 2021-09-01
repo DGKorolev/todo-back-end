@@ -6,15 +6,19 @@ const Task = require("../../model/Task")
 
 module.exports = router.get('/tasks', getAll)
 
-function getAll(req, res){
+async function getAll(req, res){
 
-    const tasks = Task.getTasks()
+    const tasks = await Task.getTasks()
 
-    const {filterType = '', sortDirection = ''} = req.query
+    console.log(tasks)
 
-    const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+    res.json(tasks)
 
-    res.json(sortedAndFilteredTasks)
+    // const {filterType = '', sortDirection = ''} = req.query
+    //
+    // const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+    //
+    // res.json(sortedAndFilteredTasks)
 
 }
 

@@ -1,14 +1,37 @@
 const fs = require('fs')
-const path = require('path')
 
 class Task {
 
-    saveTasks(tasks){
-        fs.writeFileSync(path.resolve(__dirname, '../data.txt'), JSON.stringify(tasks), 'utf8')
+    async saveTasks (data){
+
+        try {
+
+            await fs.promises.writeFile('data.txt', JSON.stringify(data), 'utf8')
+
+        } catch(err) {
+            console.log(err.message)
+        }
+
     }
 
-    getTasks(){
-        return  JSON.parse(fs.readFileSync(path.resolve(__dirname, path.resolve(__dirname, '../data.txt')), 'utf8'))
+
+    async getTasks (){
+
+        try {
+
+            const data = await fs.promises.readFile('data.txt', 'utf8')
+
+            const jsonData = await JSON.parse(data)
+
+            if (Array.isArray(jsonData)) return jsonData
+
+
+        } catch(err) {
+            console.log(err.message)
+        }
+
+        return []
+
     }
 
 }

@@ -6,7 +6,7 @@ const Task = require("../../model/Task")
 
 module.exports = router.post('/task', taskCreate)
 
-function taskCreate(req, res, next) {
+async function taskCreate(req, res, next) {
 
     const {name} = req.body
 
@@ -20,7 +20,7 @@ function taskCreate(req, res, next) {
         updatedAt: new Date().toISOString()
     }
 
-    const tasks = Task.getTasks()
+    const tasks = await Task.getTasks()
     tasks.push(newTask)
     Task.saveTasks(tasks)
 
