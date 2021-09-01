@@ -10,15 +10,11 @@ async function getAll(req, res){
 
     const tasks = await Task.getTasks()
 
-    console.log(tasks)
+    const {filterType = '', sortDirection = ''} = req.query
 
-    res.json(tasks)
+    const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
 
-    // const {filterType = '', sortDirection = ''} = req.query
-    //
-    // const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
-    //
-    // res.json(sortedAndFilteredTasks)
+    res.json(sortedAndFilteredTasks)
 
 }
 
