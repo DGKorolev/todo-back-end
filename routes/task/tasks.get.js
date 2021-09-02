@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express()
 const getTime = require("../../library/library");
-const Task = require("../../model/Task")
+const {Task} = require('../../models/index').sequelize.models
 
 
 module.exports = router.get(
@@ -9,14 +9,13 @@ module.exports = router.get(
 
     async (req, res) => {
 
-        const tasks = await Task.getTasks()
+        const tasks = await Task.findAll({raw: true})
 
         const {filterType = '', sortDirection = ''} = req.query
 
         const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
 
         res.json(sortedAndFilteredTasks)
-
     }
 )
 

@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express()
-const {v4} = require("uuid");
-const Task = require("../../model/Task")
 const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
+const {Task} = require('../../models/index').sequelize.models
 
 module.exports = router.post(
     '/task',
@@ -14,18 +13,9 @@ module.exports = router.post(
 
         const {name} = req.body
 
-        const newTask = {
-            uuid: v4(),
-            name,
-            done: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        }
-
-        const tasks = await Task.getTasks()
-        tasks.push(newTask)
-
-        Task.saveTasks(tasks)
+        const newTask = await Task.create({
+            name
+        })
 
         res.json(newTask)
 
