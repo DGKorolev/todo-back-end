@@ -1,13 +1,6 @@
 const express = require('express')
 const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware')
 const recursive = require('recursive-readdir-sync');
-const fs = require('fs')
-const {sequelize} = require('./models/index')
-
-fs.access('data.txt', (error) => {
-        if (error) fs.writeFileSync('data.txt', '')
-    }
-)
 
 const app = express()
 
