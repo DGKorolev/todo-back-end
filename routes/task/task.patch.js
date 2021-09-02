@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express()
 const ApiError = require("../../error/apiError");
-const {body} = require('express-validator');
+const {body, param} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const {Task} = require('../../models/index').sequelize.models
 
 
 module.exports = router.patch(
     '/task/:id',
-    body("name").optional().isString().trim().notEmpty(),
+    body('name').optional().isString().trim().notEmpty(),
     body('done').optional().toBoolean(),
+    param('id').isInt(),
     checkValidateErrorMiddleware,
 
     async (req, res, next) => {
