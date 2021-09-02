@@ -17,15 +17,9 @@ module.exports = router.patch(
 
         const {id} = req.params
 
-        const newData = {};
-        ['name', 'done']
-            .forEach(propertyName => {
-                if (req.body.hasOwnProperty(propertyName)) newData[propertyName] = req.body[propertyName]
-            });
-
         try {
 
-            const updatedTask = await Task.update(newData, {
+            const updatedTask = await Task.update(req.body, {
                 where: {id},
                 returning: true,
                 plain: true,
