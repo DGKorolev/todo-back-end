@@ -25,10 +25,13 @@ module.exports = router.patch(
         try {
 
             const updatedTask = await Task.update(newData, {
-                where: {id}
+                where: {id},
+                returning: true,
+                plain: true,
+                raw: true
             })
 
-            res.json(updatedTask)
+            res.json(updatedTask[1])
 
         }catch (e){
             return next(ApiError.unprocessableEntity(e.message))

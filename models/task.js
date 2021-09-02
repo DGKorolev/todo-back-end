@@ -13,8 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
+
   Task.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      validate:{
+        notEmpty: true,
+      }
+    },
     done: DataTypes.BOOLEAN
   }, {
     sequelize,

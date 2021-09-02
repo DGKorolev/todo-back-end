@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express()
-const getTime = require("../../library/library");
 const {Task} = require('../../models/index').sequelize.models
 
 
@@ -9,40 +8,33 @@ module.exports = router.get(
 
     async (req, res) => {
 
-        const tasks = await Task.findAll({raw: true})
-
         const {filterType = '', sortDirection = ''} = req.query
 
-        const sortedAndFilteredTasks = sortAndFilterTasks(tasks, filterType, sortDirection)
+        const tasks = await Task.findAll(createOptions(filterType, sortDirection))
 
-        res.json(sortedAndFilteredTasks)
+        res.json(tasks)
     }
 )
 
 
 
-function sortAndFilterTasks(tasks, filterType, sortDirection) {
+function createOptions(filterType, sortDirection) {
 
-    let filterTasks
+    const options = {raw: true}
 
     switch (filterType.toUpperCase()) {
         case "DONE":
-            filterTasks = tasks.filter(task => task.done)
+            options.where = {done: true}
             break
 
         case "UNDONE":
-            filterTasks = tasks.filter(task => !task.done)
-            break
-
-        default:
-            filterTasks = tasks
+            options.where = {done: false}
             break
     }
 
-    return filterTasks.sort((a, b) => {
-        const res = getTime(a.createdAt) - getTime(b.createdAt)
-        return sortDirection.toUpperCase() === 'ASC' ? res : -res
-    })
+    options.order = sortDirection.toUpperCase() === 'DESC' ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']]
+
+    return options
 
 }
 
