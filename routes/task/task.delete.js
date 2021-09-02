@@ -1,23 +1,24 @@
 const express = require('express')
 const router = express()
-const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
-
+const {Task} = require('../../models/index').sequelize.models
 
 module.exports = router.delete(
     '/task/:id',
 
     async (req, res, next) => {
 
-        let tasks = await Task.getTasks()
+        const {id} = req.params;
 
-        const {id} = req.params
+        try {
 
-        if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
+            await Task.destroy({
+                where: {id}
+            })
 
-        tasks = tasks.filter(task => task.uuid !== id)
-
-        await Task.saveTasks(tasks)
+        }catch (e){
+            return next(ApiError.unprocessableEntity(e.message))
+        }
 
         res.status(204).json()
 
