@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express()
-const Task = require("../../model/Task")
 const ApiError = require("../../error/apiError");
 const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
+const {Task} = require('../../models/index').sequelize.models
+
 
 module.exports = router.patch(
     '/task/:id',
@@ -13,23 +14,27 @@ module.exports = router.patch(
 
     async (req, res, next) => {
 
-        let tasks = await Task.getTasks()
-
         const {id} = req.params
-        if (!tasks.some(task => task.uuid === id)) return next(ApiError.unprocessableEntity('Task with this id does not exist'))
 
-        const editData = {};
-
+        const newData = {};
         ['name', 'done']
             .forEach(propertyName => {
-                if (req.body.hasOwnProperty(propertyName)) editData[propertyName] = req.body[propertyName]
+                if (req.body.hasOwnProperty(propertyName)) newData[propertyName] = req.body[propertyName]
             });
 
-        const editTaskIndex = tasks.findIndex(task => task.uuid === id)
-        tasks[editTaskIndex] = {...tasks[editTaskIndex], ...editData}
-        await Task.saveTasks(tasks)
+        try {
 
-        res.json(tasks[editTaskIndex])
+            const updatedTask = await Task.update(newData, {
+                where: {id}
+            })
+
+            res.json(updatedTask)
+
+        }catch (e){
+            return next(ApiError.unprocessableEntity(e.message))
+        }
+
+
     }
 )
 
