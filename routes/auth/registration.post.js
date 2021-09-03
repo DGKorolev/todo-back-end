@@ -34,14 +34,19 @@ module.exports = router.post('/registration',
             })).dataValues
 
             const token = JwtToken.create({
-                id: newUser.id,
-                email: newUser.email
+                user: {
+                    id: newUser.id,
+                    email: newUser.email
+                }
             })
 
-            res.set('Authorization', `Bearer ${token}`).end()
+
+            res.set('Authorization', `Bearer ${token}`).json()
 
         }catch (e){
+
             return next(ApiError.badRequest(e.message))
+
         }
 
     }

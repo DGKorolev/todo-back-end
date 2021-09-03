@@ -1,12 +1,16 @@
 const express = require('express')
+const checkAuthMiddleware = require("../../middleware/checkAuthMiddleware");
 const router = express()
 const {Task} = require('../../models/index').sequelize.models
 
 
 module.exports = router.get(
     '/tasks',
+    checkAuthMiddleware,
 
     async (req, res) => {
+
+        console.log(req.user)
 
         const {filterType = '', sortDirection = ''} = req.query
 
@@ -14,6 +18,7 @@ module.exports = router.get(
 
         res.json(tasks)
     }
+
 )
 
 

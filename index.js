@@ -1,6 +1,6 @@
 const express = require('express')
-const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware')
 const recursive = require('recursive-readdir-sync');
+const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware')
 
 const app = express()
 

@@ -15,6 +15,10 @@ class ApiError extends Error{
         return new ApiError(400, message)
     }
 
+    static forbidden(message = 'Forbidden'){
+        return new ApiError(400, message)
+    }
+
 }
 
 module.exports = ApiError
