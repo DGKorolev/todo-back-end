@@ -20,8 +20,6 @@ module.exports = async (req, res, next) => {
 
         user = new UserTransform(user)
 
-        console.log(user)
-
         res.locals.user = user
 
     }catch (e){
