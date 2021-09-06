@@ -6,7 +6,7 @@ const ApiError = require("../../error/apiError");
 const {User} = require('../../models/index')
 const bcrypt = require('bcrypt')
 const JwtToken = require('../../services/jwtToken')
-require('dotenv').config()
+
 
 
 module.exports = router.post('/registration',
@@ -28,23 +28,26 @@ module.exports = router.post('/registration',
 
             const hashPassword = await bcrypt.hash(password, 5)
 
-            const newUser = (await User.create({
+            const user = (await User.create({
                 email,
                 password: hashPassword
             })).dataValues
 
             const token = JwtToken.create({
                 user: {
-                    id: newUser.id,
-                    email: newUser.email
+                    id: user.id,
+                    email: user.email
                 }
             })
 
+            res.cookie('jwtToken', token, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                path: '/'
+            })
 
-            res.set('Authorization', `Bearer ${token}`).json()
+            res.json({user, jwtToken: token})
 
         }catch (e){
-
             return next(ApiError.badRequest(e.message))
 
         }
