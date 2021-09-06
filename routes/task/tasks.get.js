@@ -30,7 +30,7 @@ function createOptions(id, filterType, sortDirection) {
 
     const options = {raw: true}
 
-    options.where = {id}
+    options.where = {user_id: id}
 
     if (filterType === 'DONE') options.where = {...options.where, done: true}
     if (filterType === 'UNDONE') options.where = {...options.where, done: false}

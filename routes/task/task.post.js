@@ -14,10 +14,13 @@ module.exports = router.post(
 
     async (req, res, next) => {
 
+        console.log(req)
+
         const {name} = req.body
 
         const newTask = await Task.create({
-            name
+            name,
+            user_id: res.locals.user.id
         })
 
         res.json(newTask)
