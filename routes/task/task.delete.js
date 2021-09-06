@@ -7,22 +7,25 @@ const checkValidateErrorMiddleware = require("../../middleware/checkValidateErro
 const {Task} = require('../../models/index').sequelize.models
 
 module.exports = router.delete(
-    '/task/:id',
+    '/task/:task_id',
     checkAuthMiddleware,
-    param('id').isInt(),
+    param('task_id').isInt(),
     checkValidateErrorMiddleware,
 
     async (req, res, next) => {
 
-        const {id} = req.params;
+        const {task_id} = req.params;
 
         try {
-
             await Task.destroy({
-                where: {id}
+                where: {
+                    id: task_id,
+                    user_id: res.locals.user.id
+                }
             })
 
         }catch (e){
+            console.log(1111)
             return next(ApiError.unprocessableEntity(e.message))
         }
 
