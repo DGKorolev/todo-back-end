@@ -24,7 +24,7 @@ module.exports = router.post('/registration',
                     where: {email}
                 })
 
-                // if (count) return next(ApiError.badRequest("User with this email already exists!"))
+                if (count) return next(ApiError.badRequest("User with this email already exists!"))
 
                 const hashPassword = await bcrypt.hash(password, 5)
 
