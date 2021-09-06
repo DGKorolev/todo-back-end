@@ -49,7 +49,6 @@ module.exports = router.post('/registration',
 
             }catch (e){
                 return next(ApiError.badRequest(e.message))
-
             }
 
         }

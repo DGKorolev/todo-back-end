@@ -7,6 +7,7 @@ const {User} = require('../../models/index')
 const bcrypt = require("bcrypt");
 const JwtToken = require("../../services/jwtToken");
 const ApiError = require("../../error/apiError");
+const {hash} = require("bcrypt");
 
 
 module.exports = router.post('/login',
@@ -20,16 +21,15 @@ module.exports = router.post('/login',
 
         try {
 
-            const hashPassword = await bcrypt.hash(password, 5)
-
             const user = await User.findOne({
                 where: {
-                    email,
-                    password: hashPassword
+                    email
                 }
             })
 
-            if (!user) return next(ApiError.badRequest("User not founded"))
+            const isValid = await bcrypt.compare('123',await bcrypt.hash('123', 5));
+
+            if (!isValid) return next(ApiError.badRequest("User not founded"))
 
             const token = JwtToken.create({
                 user: {id: user.id}
