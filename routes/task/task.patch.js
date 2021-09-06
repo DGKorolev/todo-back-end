@@ -8,21 +8,24 @@ const {Task} = require('../../models/index').sequelize.models
 
 
 module.exports = router.patch(
-    '/task/:id',
+    '/task/:task_id',
     checkAuthMiddleware,
     body('name').optional().isString().trim().notEmpty(),
     body('done').optional().toBoolean(),
-    param('id').isInt(),
+    param('task_id').isInt(),
     checkValidateErrorMiddleware,
 
     async (req, res, next) => {
 
-        const {id} = req.params
+        const {task_id} = req.params
 
         try {
 
             const updatedTask = await Task.update(req.body, {
-                where: {id},
+                where: {
+                    id: task_id,
+                    user_id: res.locals.user.id
+                },
                 returning: true,
                 plain: true,
                 raw: true
@@ -31,9 +34,10 @@ module.exports = router.patch(
             res.json(updatedTask[1])
 
         }catch (e){
-            return next(ApiError.unprocessableEntity(e.message))
-        }
 
+            return next(ApiError.unprocessableEntity(e.message))
+
+        }
 
     }
 )
