@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express()
-const {Task} = require('../../models/index').sequelize.models
+// const {Task} = require('../../models/index').sequelize.models
 const { query } = require('express-validator');
+const {sequelize} = require('../../models/index')
 
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const checkAuthMiddleware = require("../../middleware/checkAuthMiddleware");
@@ -18,27 +19,58 @@ module.exports = router.get(
 
         const {filterBy = '', order = ''} = req.query
 
-        const options = createOptions(res.locals.user.id, filterBy, order)
 
-        const tasks = await Task.findAll(options)
+
+        const tasks = await sequelize.query(
+            `SELECT * FROM "Tasks" ${crateWhere(res.locals.user.id, filterBy)} ${createOrder(order)}`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                raw: true
+            }
+        );
+
 
         res.json(tasks)
     }
 )
 
 
-function createOptions(id, filterBy, order) {
+function createOrder(order){
+    return 'ORDER BY "createdAt" ' + (order === 'ASC' ? 'ASC' : 'DESC')
+}
 
-    const options = {raw: true}
+function crateWhere(user_id, filterBy){
 
-    options.where = {user_id: id}
+    const conditions = []
 
-    if (filterBy === 'DONE') options.where = {...options.where, done: true}
-    if (filterBy === 'UNDONE') options.where = {...options.where, done: false}
+    if (user_id) conditions.push(`"user_id" = ${user_id}`)
 
-    options.order = order.toUpperCase() === 'DESC' ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']]
+    if (filterBy){
 
-    return options
+        switch (filterBy){
+            case 'DONE':
+                conditions.push('"done" = true')
+                break
+            case 'UNDONE':
+                conditions.push('"done" = false')
+                break
+        }
+
+    }
+
+    let where = ''
+
+    if (conditions.length){
+
+        where = 'WHERE ' + conditions.join(' AND ')
+
+    }
+
+    console.log(where)
+
+
+    return where
+
 }
 
 
