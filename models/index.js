@@ -13,7 +13,13 @@ let sequelize;
 console.log('this is ' + process.env.NODE_ENV + ' mode')
 
 if (env === 'production'){
-  sequelize = new Sequelize(process.env.DATABASE_URL);
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+      ssl: true
+    }
+  });
 }else{
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
