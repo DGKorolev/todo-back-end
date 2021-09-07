@@ -19,8 +19,6 @@ module.exports = router.get(
 
         const {filterBy = '', order = ''} = req.query
 
-
-
         const tasks = await sequelize.query(
             `SELECT * FROM "Tasks" ${crateWhere(res.locals.user.id, filterBy)} ${createOrder(order)}`,
             {
@@ -28,7 +26,6 @@ module.exports = router.get(
                 raw: true
             }
         );
-
 
         res.json(tasks)
     }
@@ -55,19 +52,10 @@ function crateWhere(user_id, filterBy){
                 conditions.push('"done" = false')
                 break
         }
-
     }
 
     let where = ''
-
-    if (conditions.length){
-
-        where = 'WHERE ' + conditions.join(' AND ')
-
-    }
-
-    console.log(where)
-
+    if (conditions.length)  where = 'WHERE ' + conditions.join(' AND ')
 
     return where
 
