@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express()
 const {Task} = require('../../models/index').sequelize.models
-const {query} = require('express-validator');
+const { query } = require('express-validator');
+
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const checkAuthMiddleware = require("../../middleware/checkAuthMiddleware");
 
@@ -9,15 +10,15 @@ const checkAuthMiddleware = require("../../middleware/checkAuthMiddleware");
 module.exports = router.get(
     '/tasks',
     checkAuthMiddleware,
-    query('filterType').toUpperCase(),
-    query('sortDirection').toUpperCase(),
+    query('filterBy').optional().toUpperCase(),
+    query('order').optional().toUpperCase(),
     checkValidateErrorMiddleware,
 
     async (req, res) => {
 
-        const {filterType = '', sortDirection = ''} = req.query
+        const {filterBy = '', order = ''} = req.query
 
-        const options = createOptions(res.locals.user.id, filterType, sortDirection)
+        const options = createOptions(res.locals.user.id, filterBy, order)
 
         const tasks = await Task.findAll(options)
 
@@ -26,16 +27,16 @@ module.exports = router.get(
 )
 
 
-function createOptions(id, filterType, sortDirection) {
+function createOptions(id, filterBy, order) {
 
     const options = {raw: true}
 
     options.where = {user_id: id}
 
-    if (filterType === 'DONE') options.where = {...options.where, done: true}
-    if (filterType === 'UNDONE') options.where = {...options.where, done: false}
+    if (filterBy === 'DONE') options.where = {...options.where, done: true}
+    if (filterBy === 'UNDONE') options.where = {...options.where, done: false}
 
-    options.order = sortDirection.toUpperCase() === 'DESC' ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']]
+    options.order = order.toUpperCase() === 'DESC' ? [['createdAt', 'DESC']] : [['createdAt', 'ASC']]
 
     return options
 }

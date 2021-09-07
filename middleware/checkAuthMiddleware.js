@@ -2,13 +2,14 @@ const ApiError = require("../error/apiError");
 const jwt = require("jsonwebtoken")
 const {User} = require('../models/index')
 const UserTransform = require('../transformObject/UserTransform')
+const JwtToken = require('../services/jwtToken')
 
 module.exports = async (req, res, next) => {
 
     try {
 
         const token = req.headers.authorization.split(' ')[1]
-        const data = jwt.verify(token, process.env.SECRET_KEY)
+        const data = JwtToken.verify(token)
 
         let user = await User.findOne({
             where: {
