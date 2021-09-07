@@ -8,8 +8,7 @@ module.exports = async (req, res, next) => {
 
     try {
 
-        const token = req.headers.authorization.split(' ')[1]
-        const data = JwtToken.verify(token)
+        const data = JwtToken.verify(req.cookies.jwtToken)
 
         let user = await User.findOne({
             where: {
@@ -19,9 +18,7 @@ module.exports = async (req, res, next) => {
 
         if (!user) throw new Error('User not exist')
 
-        user = new UserTransform(user)
-
-        res.locals.user = user
+        res.locals.user = new UserTransform(user)
 
     }catch (e){
         return next(ApiError.forbidden(e.message))

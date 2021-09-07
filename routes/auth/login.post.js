@@ -2,7 +2,6 @@ const express = require('express')
 const router = express()
 const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
-// const {User} = require('../../models/index').sequelize.models
 const {User} = require('../../models/index')
 const bcrypt = require("bcrypt");
 const JwtToken = require("../../services/jwtToken");
@@ -36,8 +35,9 @@ module.exports = router.post('/login',
             })
 
             res.cookie('jwtToken', token, {
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                path: '/'
+                maxAge: 24 * 60 * 60 * 1000,
+                path: '/',
+                httpOnly: true
             })
 
             res.json({user, jwtToken: token})
