@@ -45,11 +45,11 @@ module.exports = router.post('/registration',
                 httpOnly: true
             })
 
-            const token = JwtToken.create({
+            const accessToken = JwtToken.create({
                 id: user.id
             })
 
-            res.json({jwtToken: token})
+            res.json({jwtToken: accessToken})
 
         } catch (e) {
             return next(ApiError.badRequest(e.message))
