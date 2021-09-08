@@ -44,7 +44,7 @@ module.exports = router.post('/login',
             })
 
             const accessToken = JwtToken.create({
-                user: {id: user.id}
+                id: user.id
             })
 
             res.json({jwtToken: accessToken})

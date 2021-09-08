@@ -17,6 +17,8 @@ module.exports = router.get(
 
     async (req, res) => {
 
+        console.log(req)
+
         const {filterBy = '', order = ''} = req.query
 
         const tasks = await sequelize.query(
