@@ -1,13 +1,8 @@
 const express = require('express')
 const router = express()
-const {body} = require('express-validator');
-const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
-const {User, Token} = require('../../models/index')
-const bcrypt = require("bcrypt");
+const {Token} = require('../../models/index')
 const JwtToken = require("../../services/jwtToken");
 const ApiError = require("../../error/apiError");
-const {hash} = require("bcrypt");
-
 
 module.exports = router.post('/refresh-token',
 
@@ -35,7 +30,6 @@ module.exports = router.post('/refresh-token',
     }catch (e){
         return next(ApiError.forbidden('Token is not valid'))
     }
-
 
     }
 )
