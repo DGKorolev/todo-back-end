@@ -13,7 +13,6 @@ let sequelize;
 console.log('this is ' + process.env.NODE_ENV + ' mode')
 
 if (env === 'production') {
-    console.log(process.env.DATABASE_URL)
 
     sequelize = new Sequelize(process.env.DATABASE_URL, {
         "dialect": "postgres",
@@ -24,6 +23,7 @@ if (env === 'production') {
             }
         }
     });
+
 } else {
     sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
