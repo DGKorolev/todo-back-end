@@ -3,56 +3,57 @@ const router = express()
 const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const ApiError = require("../../error/apiError");
-const {User} = require('../../models/index')
+const {User, Token} = require('../../models/index')
 const bcrypt = require('bcrypt')
 const JwtToken = require('../../services/jwtToken')
 
 
-
 module.exports = router.post('/registration',
-        body('email').isEmail(),
-        body('password'),
-        checkValidateErrorMiddleware,
+    body('email').isEmail(),
+    body('password'),
+    checkValidateErrorMiddleware,
 
-        async (req, res, next) => {
+    async (req, res, next) => {
 
-            const {email, password} = req.body
+        const {email, password} = req.body
 
-            try{
+        try {
 
-                const count = await User.count({
-                    where: {email}
-                })
+            const count = await User.count({
+                where: {email}
+            })
 
-                // if (count) return next(ApiError.badRequest("User with this email already exists!"))
+            // if (count) return next(ApiError.badRequest("User with this email already exists!"))
 
-                const hashPassword = await bcrypt.hash(password, 5)
+            const hashPassword = await bcrypt.hash(password, 5)
 
-                const user = (await User.create({
-                    email,
-                    password: hashPassword
-                })).dataValues
+            const user = (await User.create({
+                email,
+                password: hashPassword
+            })).dataValues
 
+            const refreshToken = JwtToken.creatRefreshToken({id: user.id})
 
-                const token = JwtToken.create({
-                    user: {
-                        id: user.id,
-                        email: user.email
-                    }
-                })
+            await Token.create({
+                token: refreshToken,
+                user_id: user.id
+            })
 
+            res.cookie('jwtToken', refreshToken, {
+                maxAge: 60 * 24 * 60 * 60 * 1000,
+                path: '/',
+                httpOnly: true
+            })
 
-                res.cookie('jwtToken', token, {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
-                    path: '/',
-                    httpOnly: true
-                })
+            const token = JwtToken.create({
+                id: user.id
+            })
 
-                res.json({user, jwtToken: token})
+            res.json({jwtToken: token})
 
-            }catch (e){
-                return next(ApiError.badRequest(e.message))
-            }
-
+        } catch (e) {
+            return next(ApiError.badRequest(e.message))
         }
+
+    }
 )

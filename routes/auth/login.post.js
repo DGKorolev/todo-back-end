@@ -2,7 +2,7 @@ const express = require('express')
 const router = express()
 const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
-const {User} = require('../../models/index')
+const {User, Token} = require('../../models/index')
 const bcrypt = require("bcrypt");
 const JwtToken = require("../../services/jwtToken");
 const ApiError = require("../../error/apiError");
@@ -30,17 +30,24 @@ module.exports = router.post('/login',
 
             if (!isValid) return next(ApiError.badRequest("User not founded"))
 
-            const token = JwtToken.create({
-                user: {id: user.id}
+            const refreshToken = JwtToken.creatRefreshToken({id: user.id})
+
+            await Token.create({
+                token: refreshToken,
+                user_id: user.id
             })
 
-            res.cookie('jwtToken', token, {
-                maxAge: 24 * 60 * 60 * 1000,
+            res.cookie('jwtToken', refreshToken , {
+                maxAge: 60 * 24 * 60 * 60 * 1000,
                 path: '/',
                 httpOnly: true
             })
 
-            res.json({user, jwtToken: token})
+            const token = JwtToken.create({
+                user: {id: user.id}
+            })
+
+            res.json({jwtToken: token})
 
         } catch (e) {
             return next(ApiError.badRequest(e.message))
