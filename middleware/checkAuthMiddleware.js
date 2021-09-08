@@ -8,7 +8,9 @@ module.exports = async (req, res, next) => {
 
     try {
 
-        const data = JwtToken.verify(req.cookies.jwtToken)
+
+        const token = req.headers.authorization.split(' ')[1]
+        const data = JwtToken.verify(token)
 
         let user = await User.findOne({
             where: {
