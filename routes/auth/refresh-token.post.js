@@ -8,28 +8,28 @@ module.exports = router.post('/refresh-token',
 
     async (req, res, next) => {
 
-    try{
+        try {
 
-        const refreshToken =  req.cookies.jwtToken
+            const refreshToken = req.cookies.jwtToken
 
-        JwtToken.verify(refreshToken)
+            JwtToken.verify(refreshToken)
 
-        const fundedToken = await Token.findOne({
-            where: {
-                token: refreshToken
-            },
-            raw: true
-        })
+            const fundedToken = await Token.findOne({
+                where: {
+                    token: refreshToken
+                },
+                raw: true
+            })
 
-        if (!fundedToken) return next(ApiError.forbidden('Token is not valid'))
+            if (!fundedToken) return next(ApiError.forbidden('Token is not valid'))
 
-        const accessToken = JwtToken.create({id: fundedToken.user_id})
+            const accessToken = JwtToken.create({id: fundedToken.user_id})
 
-        res.json({jwtToken: accessToken})
+            res.json({jwtToken: accessToken})
 
-    }catch (e){
-        return next(ApiError.forbidden('Token is not valid'))
-    }
+        } catch (e) {
+            return next(ApiError.forbidden('Token is not valid'))
+        }
 
     }
 )

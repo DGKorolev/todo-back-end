@@ -6,7 +6,7 @@ const JwtToken = require("../../services/jwtToken");
 const ApiError = require("../../error/apiError");
 
 
-module.exports = router.post('/login',
+module.exports = router.post('/logout',
 
     async (req, res) => {
         res.clearCookie('jwtToken')
