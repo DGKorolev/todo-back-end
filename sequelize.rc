@@ -1,3 +1,4 @@
+console.log('<<<<<<<<<<<< seequelize.rc >>>>>>>>>>>')
 const path = require('path');
 require('dotenv').config();
 console.log('<<<<<<<<<<<< seequelize.rc loaded')
