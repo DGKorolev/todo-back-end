@@ -12,12 +12,18 @@ module.exports = router.patch(
     checkAuthMiddleware,
     body('name').optional().isString().trim().notEmpty(),
     body('done').optional().toBoolean(),
+    body('menu_position').optional().isInt(),
     param('task_id').isInt(),
     checkValidateErrorMiddleware,
 
     async (req, res, next) => {
 
         const {task_id} = req.params
+
+        console.log('user_id:', res.locals.user.id)
+        console.log('task_id:', task_id)
+        console.log('req.body', req.body)
+
 
         try {
 
@@ -30,6 +36,8 @@ module.exports = router.patch(
                 plain: true,
                 raw: true
             })
+
+            console.log(updatedTask)
 
             res.json(updatedTask[1])
 

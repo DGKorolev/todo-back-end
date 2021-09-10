@@ -16,8 +16,15 @@ module.exports = router.post(
 
         const {name} = req.body
 
+        const menu_position = await Task.max('menu_position', {
+            where:{
+                user_id: res.locals.user.id
+            }
+        }) + 1000000
+
         const newTask = await Task.create({
             name,
+            menu_position,
             user_id: res.locals.user.id
         })
 

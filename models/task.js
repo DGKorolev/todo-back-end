@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       }
     },
-    done: DataTypes.BOOLEAN
+    done: DataTypes.BOOLEAN,
+    menu_position: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Task',

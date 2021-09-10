@@ -17,8 +17,6 @@ module.exports = router.get(
 
     async (req, res) => {
 
-        console.log(req)
-
         const {filterBy = '', order = ''} = req.query
 
         const tasks = await sequelize.query(
@@ -35,7 +33,7 @@ module.exports = router.get(
 
 
 function createOrder(order){
-    return 'ORDER BY "createdAt" ' + (order === 'ASC' ? 'ASC' : 'DESC')
+    return 'ORDER BY "menu_position","createdAt" ' + (order === 'ASC' ? 'ASC' : 'DESC')
 }
 
 function crateWhere(user_id, filterBy){

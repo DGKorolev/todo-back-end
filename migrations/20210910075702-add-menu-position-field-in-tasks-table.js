@@ -1,18 +1,12 @@
 'use strict';
 
-
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         return queryInterface.addColumn(
             'Tasks',
-            'user_id',
+            'menu_position',
             {
                 type: Sequelize.INTEGER,
-                allowNull: false,
-                references: {
-                    model: "Users",
-                    key: "id"
-                }
             }
         )
     },
@@ -20,7 +14,7 @@ module.exports = {
     down: async (queryInterface, Sequelize) => {
         return queryInterface.removeColumn(
             'Tasks',
-            'user_id'
+            'menu_position'
         )
     }
 };
