@@ -10,7 +10,7 @@ const db = {};
 
 let sequelize;
 
-console.log('this is ' + process.env.NODE_ENV + ' mode')
+console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>> this is ' + process.env.NODE_ENV + ' mode')
 
 if (env === 'production') {
 

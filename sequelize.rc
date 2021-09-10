@@ -1,5 +1,6 @@
 const path = require('path');
 require('dotenv').config();
+console.log('<<<<<<<<<<<< seequelize.rc loaded')
 module.exports = {
     'config': path.resolve('', 'migrations-config.js'),
 }
