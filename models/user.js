@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const {hashSync} = require("bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -31,7 +32,12 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       }
     },
-    password: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      async set(value) {
+        this.setDataValue('password', await hashSync(value, 5));
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

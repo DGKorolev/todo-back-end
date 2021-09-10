@@ -9,6 +9,16 @@ const ApiError = require("../../error/apiError");
 module.exports = router.post('/logout',
 
     async (req, res) => {
+
+        const refreshToken = req.cookies.jwtToken
+
+        await Token.destroy({
+            where: {
+                token: refreshToken
+            },
+            raw: true
+        })
+
         res.clearCookie('jwtToken')
         res.end()
     }

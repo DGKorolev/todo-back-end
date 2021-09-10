@@ -23,13 +23,11 @@ module.exports = router.post('/registration',
                 where: {email}
             })
 
-            // if (count) return next(ApiError.badRequest("User with this email already exists!"))
-
-            const hashPassword = await bcrypt.hash(password, 5)
+            if (count) return next(ApiError.badRequest("User with this email already exists!"))
 
             const user = (await User.create({
                 email,
-                password: hashPassword
+                password
             })).dataValues
 
             const refreshToken = JwtToken.creatRefreshToken({id: user.id})
