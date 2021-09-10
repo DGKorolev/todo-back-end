@@ -8,7 +8,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3001',
+    origin: process.env.API_URL,
     credentials: true,
     exposedHeaders: ["set-cookie"],
 }));
