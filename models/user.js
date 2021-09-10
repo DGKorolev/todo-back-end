@@ -34,8 +34,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      async set(value) {
-        this.setDataValue('password', await hashSync(value, 5));
+      set(value) {
+        this.setDataValue('password', hashSync(value, 5));
       }
     }
   }, {
