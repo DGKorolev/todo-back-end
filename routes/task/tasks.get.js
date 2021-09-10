@@ -33,7 +33,7 @@ module.exports = router.get(
 
 
 function createOrder(order){
-    return 'ORDER BY "menu_position","createdAt" ' + (order === 'ASC' ? 'ASC' : 'DESC')
+    return 'ORDER BY "menu_position" ' + (order === 'ASC' ? 'ASC' : 'DESC')
 }
 
 function crateWhere(user_id, filterBy){
