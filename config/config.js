@@ -1,4 +1,7 @@
 module.exports = {
+  "production": {
+    "dialect": "postgres"
+  },
   "development": {
     "username": "root_user",
     "password": "root_user",
