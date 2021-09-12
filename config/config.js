@@ -12,9 +12,9 @@ module.exports = {
     },
   },
   "development": {
-    "username": "root_user",
-    "password": "root_user",
-    "database": "todo_db",
+    "username": "postgres",
+    "password": "admin",
+    "database": "todo",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

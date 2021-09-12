@@ -5,6 +5,7 @@ const checkAuthMiddleware = require("../../middleware/checkAuthMiddleware");
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const {Task} = require('../../models/index').sequelize.models
 
+const POSITION_INTERVAL = 100
 
 module.exports = router.post(
     '/task',
@@ -12,7 +13,7 @@ module.exports = router.post(
     body('name').isString().bail().trim().notEmpty(),
     checkValidateErrorMiddleware,
 
-    async (req, res, next) => {
+    async (req, res) => {
 
         const {name} = req.body
 
@@ -22,7 +23,7 @@ module.exports = router.post(
             }
         })
 
-        menu_position = menu_position ?  menu_position + 1000000 : 1000000
+        menu_position = menu_position ?  menu_position + POSITION_INTERVAL : POSITION_INTERVAL
 
         const newTask = await Task.create({
             name,

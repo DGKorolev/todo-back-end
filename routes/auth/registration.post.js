@@ -4,7 +4,6 @@ const {body} = require('express-validator');
 const checkValidateErrorMiddleware = require('../../middleware/checkValidateErrorMiddleware')
 const ApiError = require("../../error/apiError");
 const {User, Token} = require('../../models/index')
-const bcrypt = require('bcrypt')
 const JwtToken = require('../../services/jwtToken')
 
 
@@ -18,6 +17,8 @@ module.exports = router.post('/registration',
         const {email, password} = req.body
 
         try {
+
+            console.log(123123)
 
             const count = await User.count({
                 where: {email}

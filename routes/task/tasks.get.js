@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express()
-// const {Task} = require('../../models/index').sequelize.models
 const { query } = require('express-validator');
 const {sequelize} = require('../../models/index')
 
@@ -33,7 +32,7 @@ module.exports = router.get(
 
 
 function createOrder(order){
-    return 'ORDER BY "menu_position" ' + (order === 'ASC' ? 'ASC' : 'DESC')
+    return 'ORDER BY "menu_position" ' + (order === 'ASC' ? 'DESC' : 'ASC')
 }
 
 function crateWhere(user_id, filterBy){
