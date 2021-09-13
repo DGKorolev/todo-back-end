@@ -12,7 +12,7 @@ module.exports = router.post('/refresh-token',
 
             const refreshToken = req.cookies.jwtToken
 
-            if (refreshToken) return next(ApiError.forbidden('Authorization required'))
+            if (!refreshToken) return next(ApiError.forbidden('Authorization required'))
 
             JwtToken.verify(refreshToken)
 
