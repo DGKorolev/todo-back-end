@@ -41,7 +41,9 @@ module.exports = router.post('/registration',
             res.cookie('jwtToken', refreshToken, {
                 maxAge: 60 * 24 * 60 * 60 * 1000,
                 path: '/',
-                httpOnly: true
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true
             })
 
             const accessToken = JwtToken.create({
