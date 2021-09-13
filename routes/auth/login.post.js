@@ -41,7 +41,8 @@ module.exports = router.post('/login',
                 maxAge: 60 * 24 * 60 * 60 * 1000,
                 path: '/',
                 httpOnly: true,
-                sameSite: 'none'
+                sameSite: 'none',
+                secure: true
             })
 
             const accessToken = JwtToken.create({
